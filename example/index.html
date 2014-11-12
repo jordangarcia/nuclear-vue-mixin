@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <title>NuclearVueMixin Test</title>
+    <script src="/test.js"></script>
+  </head>
+  <body>
+    <div id="list1" style="float: left">
+      <form v-on="submit: addItem">
+        <input type="text" v-model="name" />
+        <button>add item</button>
+      </form>
+      <ul>
+        <li v-repeat="item: items"><h3>{{item.id}} - {{item.name}}<h3></li>
+      </ul>
+    </div>
+    <div id="list2" style="float: right">
+      <form v-on="submit: addItem">
+        <input type="text" v-model="name" />
+        <button>add item</button>
+      </form>
+      <ul>
+        <li v-repeat="item: items">{{item.id}} - {{item.name}}</li>
+      </ul>
+    </div>
+  </body>
+</html>

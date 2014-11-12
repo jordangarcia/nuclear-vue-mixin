@@ -25,49 +25,27 @@ module.exports = function(reactor) {
         return
       }
 
+      var vm = this
       var dataBindings = this.$options.getDataBindings()
-      var syncData = setViewModelData.bind(this, reactor, dataBindings)
-      var deps = objectValues(dataBindings)
-
       var changeObserver = reactor.createChangeObserver()
-      changeObserver.onChange(deps, syncData)
+
+      each(dataBindings, function(reactorKeyPath, vmProp) {
+        vm.$set(vmProp, reactor.getJS(reactorKeyPath))
+
+        changeObserver.onChange(reactorKeyPath, function(val) {
+          vm.$set(vmProp, reactor.getJS(reactorKeyPath))
+        })
+      })
 
       this.$on('destroyed', function() {
         changeObserver.destroy()
       })
-
-      // initial sync
-      syncData()
     }
   }
 }
-
-/**
- * Syncs a mapping of data bindidngs between a vm and reactor
- * @param {Nuclear.Reactor} reactor
- * @param {object} dataBindings
- */
-function setViewModelData(reactor, dataBindings) {
-  for (var vmProp in dataBindings) {
-    var reactorKeyPath = dataBindings[vmProp]
-    this.$set(vmProp, reactor.getJS(reactorKeyPath))
-  }
-}
-
 
 function each(arr, fn) {
   for (var key in arr) {
     fn(arr[key], key)
   }
-}
-
-/**
- * Gets the values for an object
- */
-function objectValues(obj) {
-  var values = []
-  for (var prop in obj) {
-    values.push(obj[prop])
-  }
-  return values
 }

@@ -1,26 +1,47 @@
 <html>
   <head>
     <title>NuclearVueMixin Test</title>
-    <script src="/test.js"></script>
+    <script src="/dist/test.js"></script>
   </head>
   <body>
-    <div id="list1" style="float: left">
-      <form v-on="submit: addItem">
-        <input type="text" v-model="name" />
-        <button>add item</button>
-      </form>
-      <ul>
-        <li v-repeat="item: items"><h3>{{item.id}} - {{item.name}}<h3></li>
-      </ul>
-    </div>
-    <div id="list2" style="float: right">
-      <form v-on="submit: addItem">
-        <input type="text" v-model="name" />
-        <button>add item</button>
-      </form>
-      <ul>
-        <li v-repeat="item: items">{{item.id}} - {{item.name}}</li>
-      </ul>
-    </div>
+    <table>
+      <tr>
+        <td>
+          <div id="list1">
+            <form v-on="submit: addItem">
+              <input type="text" v-model="name" />
+              <button>add item</button>
+            </form>
+            <ul>
+              <li v-repeat="item: items">{{item.id}} - {{item.name}}</li>
+            </ul>
+          </div>
+        </td>
+        <td>
+          <div id="list2">
+            <form v-on="submit: addItem">
+              <input type="text" v-model="name" />
+              <button>add item</button>
+            </form>
+            <ul>
+              <li v-repeat="item: items">{{item.id}} - {{item.name}}</li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=2>
+          <div id="history">
+            <h3>History</h3>
+            <ul>
+              <li v-repeat="story: readableHistory">
+              <a href="javascript:void(0)" v-on="click: restoreState($index)">Restore</a>
+                {{ story }}
+              </li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+    </table>
   </body>
 </html>

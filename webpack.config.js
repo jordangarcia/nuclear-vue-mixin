@@ -12,11 +12,11 @@ var uglifyJsPlugin = new webpack.optimize.UglifyJsPlugin();
 
 module.exports = [
   {
-    entry: './test.js',
+  entry: './example/test.js',
     output: {
       library: 'mixintest',
       libraryTarget: 'umd',
-      filename: './example/test.js'
+      filename: './example/dist/test.js'
     },
     module: {
       loaders: [

@@ -8,6 +8,7 @@
       <tr>
         <td>
           <div id="list1">
+            <h3 v-show="isTooHigh">IS TOO HIGH</h3>
             <form v-on="submit: addItem">
               <input type="text" v-model="name" />
               <button>add item</button>
@@ -15,6 +16,7 @@
             <ul>
               <li v-repeat="item: items">{{item.id}} - {{item.name}}</li>
             </ul>
+
           </div>
         </td>
         <td>

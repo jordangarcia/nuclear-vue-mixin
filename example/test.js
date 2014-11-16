@@ -2,7 +2,8 @@ var Vue = require('vue')
 var Mixin = require('../src/mixin')
 var reactor = require('./test-reactor')
 var timeMachine = require('./time-machine')
-
+var itemTotal = require('./item-total')
+var Computed = require('nuclear-js').Computed
 
 document.addEventListener("DOMContentLoaded", function() {
   var reactorTimeMachine = timeMachine(reactor)
@@ -14,7 +15,14 @@ document.addEventListener("DOMContentLoaded", function() {
     getDataBindings: function() {
       return {
         items: 'items',
-        count: 'counts.itemCount'
+        count: 'counts.itemCount',
+        isTooHigh: Computed(
+          [itemTotal],
+          function(itemTotal) {
+            debugger;
+            return itemTotal > 5
+          }
+        )
       }
     },
 

@@ -1,5 +1,6 @@
 var Nuclear = require('nuclear-js')
 var Immutable = Nuclear.Immutable
+var itemTotal = require('./item-total')
 
 var id = 1;
 
@@ -15,13 +16,6 @@ var items = Nuclear.ReactiveState({
     })
   }
 })
-
-var itemTotal = Nuclear.Computed(
-  ['items'],
-  function(items) {
-    return items.size
-  }
-)
 
 module.exports = Nuclear.Reactor({
   state: {

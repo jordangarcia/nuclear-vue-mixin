@@ -10,6 +10,8 @@ var genFilename = function(isMin) {
 
 var uglifyJsPlugin = new webpack.optimize.UglifyJsPlugin();
 
+console.log(process.cwd())
+
 module.exports = [
   {
   entry: './example/test.js',

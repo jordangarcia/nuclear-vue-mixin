@@ -1,3 +1,6 @@
+var Nuclear = require('nuclear-js')
+var Computed = require('nuclear-js').Computed
+
 /**
  * VueJS mixin to bind to a NuclearJS reactor
  *
@@ -30,11 +33,22 @@ module.exports = function(reactor) {
       var changeObserver = reactor.createChangeObserver()
 
       each(dataBindings, function(reactorKeyPath, vmProp) {
-        vm.$set(vmProp, reactor.getJS(reactorKeyPath))
+        if (Computed.isComputed(reactorKeyPath)) {
+          // TODO refactor to Reactor.get(computed)
+          var val = Nuclear.toJS(Computed.evaluate(reactor.state, reactorKeyPath))
+          vm.$set(vmProp, val)
 
-        changeObserver.onChange(reactorKeyPath, function(val) {
+          changeObserver.onChange(reactorKeyPath.flatDeps, function() {
+            var val = Nuclear.toJS(Computed.evaluate(reactor.state, reactorKeyPath))
+            vm.$set(vmProp, val)
+          })
+        } else {
           vm.$set(vmProp, reactor.getJS(reactorKeyPath))
-        })
+
+          changeObserver.onChange(reactorKeyPath, function(val) {
+            vm.$set(vmProp, reactor.getJS(reactorKeyPath))
+          })
+        }
       })
 
       this.$on('destroyed', function() {

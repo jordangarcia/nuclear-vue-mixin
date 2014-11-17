@@ -35,11 +35,11 @@ module.exports = function(reactor) {
       each(dataBindings, function(reactorKeyPath, vmProp) {
         if (Computed.isComputed(reactorKeyPath)) {
           // TODO refactor to Reactor.get(computed)
-          var val = Nuclear.toJS(Computed.evaluate(reactor.state, reactorKeyPath))
+          var val = Nuclear.toJS(Computed.evaluate(reactor.get(), reactorKeyPath))
           vm.$set(vmProp, val)
 
           changeObserver.onChange(reactorKeyPath.flatDeps, function() {
-            var val = Nuclear.toJS(Computed.evaluate(reactor.state, reactorKeyPath))
+            var val = Nuclear.toJS(Computed.evaluate(reactor.get(), reactorKeyPath))
             vm.$set(vmProp, val)
           })
         } else {

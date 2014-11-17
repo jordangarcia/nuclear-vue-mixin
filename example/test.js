@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
     getDataBindings: function() {
       return {
         items: 'items',
+
         count: 'counts.itemCount',
         isTooHigh: Computed(
           [itemTotal],

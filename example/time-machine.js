@@ -30,7 +30,7 @@ module.exports = function createHistoryReactor(reactor) {
     }
   })
 
-  reactor.changeEmitter.addChangeListener(function(state) {
+  reactor.onChange(function(state) {
     timeMachine.dispatch('change', {
       state: state
     })

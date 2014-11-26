@@ -28,7 +28,17 @@ module.exports = function(reactor) {
        * @param {string} vmProp
        * @param {Getter|KeyPath} getter
        */
-      $sync(vmProp, getter) {
+      $sync: function(vmProp, getter) {
+        if (!this.__reactorUnwatchFns) {
+          // check here because $sync can be called in `created` before the mixins created
+          this.__reactorUnwatchFns = {}
+        }
+
+        if (this.__reactorUnwatchFns[vmProp]) {
+          // already a watcher, unwatch
+          this.__reactorUnwatchFns[vmProp]()
+        }
+
         if (!Nuclear.Getter.isGetter(getter) &&
             !Nuclear.KeyPath.isKeyPath(getter)) {
 
@@ -38,10 +48,21 @@ module.exports = function(reactor) {
 
         this.$set(vmProp, reactor.getJS(getter))
         // setup the data observation
-        var unwatchFn = reactor.observe(getter, val => {
+        this.__reactorUnwatchFns[vmProp] = reactor.observe(getter, function(val) {
           this.$set(vmProp, Nuclear.toJS(val))
-        })
-        this.__reactorUnwatchFns.push(unwatchFn)
+        }.bind(this))
+      },
+
+      /**
+       * Unysync reactor observation for a vmProp
+       * @param {string} vmProp
+       */
+      $unsync: function(vmProp) {
+        var unsyncFn = this.__reactorUnwatchFns[vmProp]
+        if (unsyncFn) {
+          unsyncFn()
+          delete this.__reactorUnwatchFns[vmProp]
+        }
       }
     },
 
@@ -50,23 +71,29 @@ module.exports = function(reactor) {
         throw new Error("Must supply reactor to ViewModel")
       }
 
-      this.__reactorUnwatchFns = []
-
-      if (!this.$options.getDataBindings) {
-        return
+      if (!this.__reactorUnwatchFns) {
+        this.__reactorUnwatchFns = {}
       }
 
-      var dataBindings = this.$options.getDataBindings()
+      if (this.$options.getDataBindings) {
+        each(this.$options.getDataBindings(), function(reactorKeyPath, vmProp) {
+          this.$sync(vmProp, reactorKeyPath)
+        }.bind(this))
+      }
 
-      _.each(dataBindings, (reactorKeyPath, vmProp) => {
-        this.$sync(vmProp, reactorKeyPath)
-      })
 
-      this.$on('destroyed', () => {
-        while (this.__reactorUnwatchFns.length) {
-          this.__reactorUnwatchFns.shift()()
-        }
+      this.$on('destroyed', function() {
+        each(this.__reactorUnwatchFns, function(fn) {
+          fn()
+        })
+        delete this.__reactorUnwatchFns
       })
     }
+  }
+}
+
+function each(obj, fn) {
+  for (var key in obj) {
+    fn(obj[key], key)
   }
 }

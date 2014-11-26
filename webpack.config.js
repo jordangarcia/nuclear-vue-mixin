@@ -2,7 +2,7 @@ var webpack = require('webpack');
 
 var genFilename = function(isMin) {
   return [
-    './dist/nuclear',
+    './dist/nuclear-vue-mixin',
     (isMin ? '.min' : ''),
     '.js'
   ].join('');
@@ -14,7 +14,7 @@ console.log(process.cwd())
 
 module.exports = [
   {
-  entry: './example/test.js',
+    entry: './example/test.js',
     output: {
       library: 'mixintest',
       libraryTarget: 'umd',
@@ -25,5 +25,32 @@ module.exports = [
         { test: /\.js$/, loader: 'jstransform-loader' }
       ]
     },
+  },
+  {
+    entry: './src/mixin.js',
+    output: {
+      library: 'NuclearVueMixin',
+      libraryTarget: 'umd',
+      filename: genFilename(false),
+    },
+    module: {
+      loaders: [
+        { test: /\.js$/, loader: 'jstransform-loader' }
+      ]
+    },
+  },
+  {
+    entry: './src/mixin.js',
+    output: {
+      library: 'NuclearVueMixin',
+      libraryTarget: 'umd',
+      filename: genFilename(true),
+    },
+    module: {
+      loaders: [
+        { test: /\.js$/, loader: 'jstransform-loader' }
+      ]
+    },
+    plugins: [uglifyJsPlugin],
   }
 ];

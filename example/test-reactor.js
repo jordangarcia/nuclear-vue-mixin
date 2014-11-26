@@ -4,7 +4,7 @@ var itemTotal = require('./item-total')
 
 var id = 1;
 
-var items = Nuclear.ReactiveState({
+var items = Nuclear.Store({
   getInitialState: function() {
     return []
   },
@@ -18,11 +18,7 @@ var items = Nuclear.ReactiveState({
 })
 
 module.exports = Nuclear.Reactor({
-  state: {
+  stores: {
     items: items,
-
-    counts: {
-      itemCount: itemTotal
-    }
   }
 })

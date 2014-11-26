@@ -3,11 +3,10 @@ var Mixin = require('../src/mixin')
 var reactor = require('./test-reactor')
 var timeMachine = require('./time-machine')
 var itemTotal = require('./item-total')
-var Computed = require('nuclear-js').Computed
+var Getter = require('nuclear-js').Getter
 
 document.addEventListener("DOMContentLoaded", function() {
   var reactorTimeMachine = timeMachine(reactor)
-  reactor.initialize()
 
   var List = Vue.extend({
     mixins: [Mixin(reactor)],
@@ -16,14 +15,11 @@ document.addEventListener("DOMContentLoaded", function() {
       return {
         items: 'items',
 
-        count: 'counts.itemCount',
-        isTooHigh: Computed(
-          [itemTotal],
-          function(itemTotal) {
-            debugger;
-            return itemTotal > 5
-          }
-        )
+        count: itemTotal,
+
+        isTooHigh: Getter(itemTotal, (itemTotal) => {
+          return itemTotal > 5
+        })
       }
     },
 
@@ -45,9 +41,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
     getDataBindings: function() {
       return {
-        history: 'history.states',
-        readableHistory: 'historyStrings',
-        current: 'history.currentTime'
+        readableHistory: Getter(['history'], function(states) {
+          return states.map(function(state) {
+            return state.toString()
+          })
+        }),
       }
     },
 

@@ -1,6 +1,6 @@
 {
   "name": "nuclear-vue-mixin",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "VueJS mixin to seamlessly bind to NuclearJS data",
   "main": "index.js",
   "scripts": {
@@ -21,6 +21,6 @@
     "jstransform-loader": "^0.1.1"
   },
   "dependencies": {
-    "nuclear-js": "^0.4.x"
+    "nuclear-js": "^0.5.x"
   }
 }

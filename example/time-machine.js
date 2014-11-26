@@ -6,8 +6,8 @@ var Nuclear = require('nuclear-js')
  */
 module.exports = function createHistoryReactor(reactor) {
   var timeMachine = Nuclear.Reactor({
-    state: {
-      history: Nuclear.ReactiveState({
+    stores: {
+      history: Nuclear.Store({
         getInitialState: function() {
           return []
         },
@@ -19,18 +19,10 @@ module.exports = function createHistoryReactor(reactor) {
         }
       }),
 
-      historyStrings: Nuclear.Computed(
-        ['history'],
-        function(states) {
-          return states.map(function(state) {
-            return state.toString()
-          })
-        }
-      ),
     }
   })
 
-  reactor.onChange(function(state) {
+  reactor.observe(function(state) {
     timeMachine.dispatch('change', {
       state: state
     })
@@ -46,10 +38,8 @@ module.exports = function createHistoryReactor(reactor) {
     }
     var newState = this.get(['history', newTime])
 
-    reactor.initialize(newState)
+    reactor.loadState(newState)
   }
-
-  timeMachine.initialize()
 
   return timeMachine
 }

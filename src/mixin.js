@@ -43,11 +43,11 @@ module.exports = function(reactor, isLazy) {
     },
     detached: function(){
       if(isLazy && this.__dataBinded){
-        this.$unBind();
+        this.$unbind();
       }
     },
     beforeDestroy: function(){
-      this.$unBind();
+      this.$unbind();
     },
     methods: {
       

@@ -1,24 +1,29 @@
 var Nuclear = require('nuclear-js')
-var Immutable = Nuclear.Immutable
-var itemTotal = require('./item-total')
+var toImmutable = Nuclear.toImmutable
 
 var id = 1;
 
 var items = Nuclear.Store({
   getInitialState: function() {
-    return []
+    return toImmutable([])
   },
 
   initialize: function() {
-    this.on('addItem', function(list, item) {
-      var item = Immutable.Map(item).set('id', id++)
-      return list.push(Immutable.Map(item))
+    this.on('addItem', function(state, item) {
+      return state.withMutations(function(items){
+        var immutableItem = toImmutable(item);
+        return items.push(immutableItem);
+      })
     })
   }
 })
 
-module.exports = Nuclear.Reactor({
-  stores: {
-    items: items,
-  }
+var Reactor = new Nuclear.Reactor({
+  debug: true
 })
+
+Reactor.registerStores({
+  items: items
+})
+
+module.exports = Reactor;

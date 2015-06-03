@@ -2,8 +2,7 @@ var Vue = require('vue')
 var Mixin = require('../src/mixin')
 var reactor = require('./test-reactor')
 var timeMachine = require('./time-machine')
-var itemTotal = require('./item-total')
-var Getter = require('nuclear-js').Getter
+var itemActions = require('./item-actions')
 
 document.addEventListener("DOMContentLoaded", function() {
   var reactorTimeMachine = timeMachine(reactor)
@@ -13,13 +12,22 @@ document.addEventListener("DOMContentLoaded", function() {
 
     getDataBindings: function() {
       return {
-        items: 'items',
+        items: itemActions.items,
 
-        count: itemTotal,
+        count: itemActions.itemTotal,
 
-        isTooHigh: Getter(itemTotal, (itemTotal) => {
-          return itemTotal > 5
-        })
+        isTooHigh: [itemActions.itemTotal, (itemTotal) => {
+          return itemTotal && itemTotal > 5
+        }]
+      }
+    },
+
+    data: function(){
+      return {
+        name: '',
+        items: [],
+        count: 0,
+        isTooHigh: false
       }
     },
 
@@ -41,11 +49,17 @@ document.addEventListener("DOMContentLoaded", function() {
 
     getDataBindings: function() {
       return {
-        readableHistory: Getter(['history'], function(states) {
-          return states.map(function(state) {
+        readableHistory: [['history'], function(states) {
+          return states && states.map(function(state) {
             return state.toString()
           })
-        }),
+        }],
+      }
+    },
+
+    data: function(){
+      return {
+        readableHistory: []
       }
     },
 

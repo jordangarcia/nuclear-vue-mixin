@@ -9,18 +9,18 @@
   "author": "Jordan Garcia",
   "license": "ISC",
   "devDependencies": {
-    "jest": "^0.1.37",
-    "vue": "^0.11.0",
     "concat": "^1.0.0",
-    "through": "^2.3.6",
-    "jstransform": "^7.0.0",
-    "lodash": "^2.4.1",
     "gulp": "^3.8.10",
     "gulp-connect": "^2.2.0",
-    "webpack": "^1.4.13",
-    "jstransform-loader": "^0.1.1"
+    "jest": "^0.1.37",
+    "jstransform": "^7.0.0",
+    "jstransform-loader": "^0.1.1",
+    "lodash": "^2.4.1",
+    "through": "^2.3.6",
+    "vue": "^0.12.0-rc",
+    "webpack": "^1.4.13"
   },
   "dependencies": {
-    "nuclear-js": "^0.5.x"
+    "nuclear-js": "^1.0.2"
   }
 }
